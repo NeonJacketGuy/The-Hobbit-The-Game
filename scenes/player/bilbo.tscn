@@ -1,0 +1,87 @@
+[gd_scene format=3 uid="uid://dr6n85ea8ee88"]
+
+[sub_resource type="GDScript" id="GDScript_5208v"]
+script/source = "extends CharacterBody2D
+
+@export var move_speed := 220.0
+var draw_time = 3
+var armed := false
+var can_interact := true
+
+func _physics_process(_delta: float) -> void:
+	
+	var direction_x := Input.get_axis(\"Move_Left\",  \"Move_Right\")
+	velocity.x = direction_x * move_speed
+	var direction_y := Input.get_axis(\"Move_Up\",\"Move_Down\")
+	velocity.y = direction_y * move_speed
+
+	move_and_slide()
+
+func _process(_delta: float) -> void:
+	can_interact =! armed
+	if Input.is_action_just_pressed(\"Interact\"):
+		if armed == true:
+			pass
+
+func _input(event) -> void:
+	var direction_x := Input.get_axis(\"Move_Left\",  \"Move_Right\")
+	velocity.x = direction_x * move_speed
+	var direction_y := Input.get_axis(\"Move_Up\",\"Move_Down\")
+	velocity.y = direction_y * move_speed
+	
+	if Input.is_action_just_pressed(\"Arm_Yourself\"):
+		if armed == false:
+			armed = true
+			%ColorRect.visible = true
+			%CollisionShape2D.disabled = false
+			print(\"you are now armed and dangerous\")
+		elif armed == true:
+			armed = false
+			%ColorRect.visible = false
+			%CollisionShape2D.disabled = true
+			print(\"attack him hes unnarmed\")
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gfavo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_5208v"]
+size = Vector2(20, 2)
+
+[node name="Bilbo" type="CharacterBody2D" unique_id=1188193354]
+script = SubResource("GDScript_5208v")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2075052946]
+offset_left = -10.0
+offset_top = -15.0
+offset_right = 10.0
+offset_bottom = 15.0
+color = Color(0.32941177, 1, 0.30980393, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=524170039]
+shape = SubResource("CapsuleShape2D_gfavo")
+
+[node name="Area2D" type="Area2D" parent="." unique_id=301396952]
+
+[node name="ColorRect" type="ColorRect" parent="Area2D" unique_id=1455660813]
+unique_name_in_owner = true
+visible = false
+offset_left = 6.0
+offset_top = 1.0
+offset_right = 26.0
+offset_bottom = 3.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D" unique_id=1756249673]
+unique_name_in_owner = true
+position = Vector2(16, 2)
+shape = SubResource("RectangleShape2D_5208v")
+disabled = true
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1003255397]
+position_smoothing_enabled = true
+position_smoothing_speed = 2.0
+drag_horizontal_enabled = true
+drag_vertical_enabled = true
+drag_left_margin = 0.5
+drag_top_margin = 0.5
+drag_right_margin = 0.5
+drag_bottom_margin = 0.5

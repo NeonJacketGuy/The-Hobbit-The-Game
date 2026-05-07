@@ -1,0 +1,66 @@
+[gd_scene format=3 uid="uid://dr6n85ea8ee88"]
+
+[sub_resource type="GDScript" id="GDScript_5208v"]
+script/source = "extends CharacterBody2D
+
+@export var move_speed := 220.0
+var draw_time = 3
+
+func _physics_process(_delta: float) -> void:
+	
+	var direction_x := Input.get_axis(\"Move_Left\",  \"Move_Right\")
+	velocity.x = direction_x * move_speed
+	var direction_y := Input.get_axis(\"Move_Up\",\"Move_Down\")
+	velocity.y = direction_y * move_speed
+
+	move_and_slide()
+
+func _process(_delta: float) -> void:
+	var sword_drawn := false
+	if Input.is_action_just_pressed(\"Interact\"):
+			print(\"holding handle\")
+			%DrawTime.start()
+	if Input.is_action_just_pressed(\"Interact\"):
+		if draw_time >= 3:
+			if sword_drawn == false:
+				sword_drawn = true
+				print(\"sword drawn\")
+				%DrawTime.stop()
+				draw_time = 0
+			else:
+				sword_drawn = false
+				print(\"sword sheathed\")
+				%DrawTime.stop()
+				draw_time = 0
+		else:
+			%DrawTime.stop()
+			draw_time = 0
+			print(\"failed to draw sword\")
+	else:
+		print(\"failed to attempt to draw sword\")
+
+
+func _on_draw_time_timeout() -> void:
+	draw_time += 1
+	print(\"actively drawing sowrd\")
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gfavo"]
+
+[node name="Bilbo" type="CharacterBody2D" unique_id=1188193354]
+script = SubResource("GDScript_5208v")
+
+[node name="ColorRect" type="ColorRect" parent="." unique_id=2075052946]
+offset_left = -10.0
+offset_top = -15.0
+offset_right = 10.0
+offset_bottom = 15.0
+color = Color(0.32941177, 1, 0.30980393, 1)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=524170039]
+shape = SubResource("CapsuleShape2D_gfavo")
+
+[node name="DrawTime" type="Timer" parent="." unique_id=351293343]
+unique_name_in_owner = true
+
+[connection signal="timeout" from="DrawTime" to="." method="_on_draw_time_timeout"]
