@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://cp62qefijf182"]
+
+[ext_resource type="Texture2D" uid="uid://wlbodjxbqix8" path="res://icon.svg" id="1_qty17"]
+
+[sub_resource type="GDScript" id="GDScript_qty17"]
+script/source = "extends CharacterBody2D
+
+@export var move_speed := 200.0
+var is_stabbing := false
+
+func _physics_process(_delta: float) -> void:
+	
+	velocity.x = move_speed
+	velocity.y = move_speed
+	
+	move_and_slide()
+
+func _process(_delta: float) -> void:
+		if is_stabbing == false:
+			%Attack.rotation = ( get_global_mouse_position() - global_position).angle() + deg_to_rad(0)
+"
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pkqou"]
+radius = 64.0
+height = 130.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pkqou"]
+size = Vector2(68, 120)
+
+[node name="EnemyBase" type="CharacterBody2D" unique_id=1731129882]
+script = SubResource("GDScript_qty17")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2320587]
+texture = ExtResource("1_qty17")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1117331210]
+shape = SubResource("CapsuleShape2D_pkqou")
+
+[node name="Attack" type="Area2D" parent="." unique_id=2122556564]
+unique_name_in_owner = true
+
+[node name="ColorRect" type="ColorRect" parent="Attack" unique_id=1587116832]
+offset_left = 63.0
+offset_top = -60.0
+offset_right = 131.0
+offset_bottom = 60.0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Attack" unique_id=1368417384]
+position = Vector2(97, 0)
+shape = SubResource("RectangleShape2D_pkqou")
