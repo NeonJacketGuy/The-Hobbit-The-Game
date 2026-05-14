@@ -99,6 +99,7 @@ disabled = true
 
 [node name="TimeToStab" type="Timer" parent="Sword" unique_id=410364293]
 unique_name_in_owner = true
+wait_time = 0.2
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1003255397]
 position_smoothing_enabled = true
