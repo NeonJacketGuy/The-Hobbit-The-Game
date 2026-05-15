@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://7dpvu6d678o7"
-path="res://.godot/imported/First-NPC-Art.png-867f6621f3f1fd05559ff190542eef0d.ctex"
+path="res://.godot/imported/First-NPC-Art.png-0ec3c97992bc5222f2561b2614569b27.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/art/First-NPC-Art.png"
-dest_files=["res://.godot/imported/First-NPC-Art.png-867f6621f3f1fd05559ff190542eef0d.ctex"]
+source_file="res://assets/art/npc_assets/First-NPC-Art.png"
+dest_files=["res://.godot/imported/First-NPC-Art.png-0ec3c97992bc5222f2561b2614569b27.ctex"]
 
 [params]
 
