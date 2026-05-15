@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dumilwiome5ia"
-path="res://.godot/imported/The-Foot.png-65620996feeb3f6b911dd79492dfa570.ctex"
+uid="uid://crtlrhocmsq8e"
+path="res://.godot/imported/pixilart-sprite.png-699f5e12f1427b36a4c73d8ca253e40a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://The-Foot.png"
-dest_files=["res://.godot/imported/The-Foot.png-65620996feeb3f6b911dd79492dfa570.ctex"]
+source_file="res://assets/art/interactible_assets/pixilart-sprite.png"
+dest_files=["res://.godot/imported/pixilart-sprite.png-699f5e12f1427b36a4c73d8ca253e40a.ctex"]
 
 [params]
 
