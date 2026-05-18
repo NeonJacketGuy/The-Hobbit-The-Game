@@ -21,7 +21,7 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func _process(_delta: float) -> void:
-	 can_interact =! armed
+	can_interact =! armed
 	if Input.is_action_just_pressed(\"Interact\"):
 		if armed == true:
 			pass
@@ -71,7 +71,6 @@ size = Vector2(20, 2)
 
 [node name="Bilbo" type="CharacterBody2D" unique_id=1188193354]
 script = SubResource("GDScript_5208v")
-move_speed = null
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1693926725]
 texture = ExtResource("1_gfavo")
