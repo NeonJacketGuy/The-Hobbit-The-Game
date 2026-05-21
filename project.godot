@@ -11,6 +11,7 @@ config_version=5
 [application]
 
 config/name="The Hobbit-The Game"
+run/main_scene="uid://dr6n85ea8ee88"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
