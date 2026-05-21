@@ -5,7 +5,7 @@
 [sub_resource type="GDScript" id="GDScript_5208v"]
 script/source = "extends CharacterBody2D
 
-@export var move_speed := 220.0
+@export var move_speed = 220.0
 var draw_time = 3
 var armed := false
 var can_interact := true
@@ -13,14 +13,19 @@ var is_stabbing = false
 var hiding = false
 var have_ring = false
 var visible_to_enemy = 1
+var step_time = 0
+var step_volume = 2
 
 func _physics_process(_delta: float) -> void:
 	
-	var direction_x := Input.get_axis(\"Move_Left\",  \"Move_Right\")
-	velocity.x = direction_x * move_speed
-	var direction_y := Input.get_axis(\"Move_Up\",\"Move_Down\")
-	velocity.y = direction_y * move_speed
-
+	if velocity.x != 0:
+		step()
+	elif velocity.y != 0:
+		step()
+	elif step_time >= 0:
+		still()
+	
+	
 	move_and_slide()
 
 func _process(_delta: float) -> void:
@@ -31,11 +36,15 @@ func _process(_delta: float) -> void:
 	
 	if is_stabbing == false:
 		%Sword.rotation = ( get_global_mouse_position() - global_position).angle() + deg_to_rad(0)
+	
+	print(visible_to_enemy)
 
 func _input(_event) -> void:
 	var direction_x := Input.get_axis(\"Move_Left\",  \"Move_Right\")
+	
 	velocity.x = direction_x * move_speed
 	var direction_y := Input.get_axis(\"Move_Up\",\"Move_Down\")
+	
 	velocity.y = direction_y * move_speed
 	
 	if Input.is_action_just_pressed(\"Arm_Yourself\"):
@@ -43,12 +52,12 @@ func _input(_event) -> void:
 			armed = true
 			%ColorRect.visible = true
 			%CollisionShape2D.disabled = false
-			print(\"you are now armed and dangerous\")
+			visible_to_enemy += 0.75
 		elif armed == true:
 			armed = false
 			%ColorRect.visible = false
 			%CollisionShape2D.disabled = true
-			print(\"attack him hes unnarmed\")
+			visible_to_enemy -= 0.75
 	
 	if Input.is_action_just_pressed(\"Interact\"):
 		if can_interact == true:
@@ -61,11 +70,9 @@ func _input(_event) -> void:
 				
 				%TimeToStab.start()
 	if Input.is_action_just_pressed(\"Hide\"):
-		print(\"attempting to hide\")
 		if hiding == false:
 			hideing()
 	if Input.is_action_just_released(\"Hide\"):
-		print(\"attempting to reveal\")
 		if hiding == true:
 			reveal()
 
@@ -75,27 +82,41 @@ func _on_time_to_stab_timeout() -> void:
 	is_stabbing = false
 
 func hideing():
-	print(\"hiding\")
 	if have_ring == true:
 		%Sprite2D.visible = false
-		visible_to_enemy = 0
+		visible_to_enemy -= 1
 		hiding = true
+		step_volume = 1
+		move_speed = 110
 	else:
-		print(\"hidden\")
 		%Sprite2D.modulate = Color(1.0, 1.0, 1.0, 0.5)
-		visible_to_enemy = 0.5
+		visible_to_enemy -= 0.5
 		hiding = true
+		step_volume = 1
+		move_speed = 110
 
 func reveal():
 	if have_ring == true:
 		%Sprite2D.visible = true
-		visible_to_enemy = 1
+		visible_to_enemy += 1
 		hiding = false
+		step_volume = 2
+		move_speed = 220
 	else:
-		print(\"unhide\")
 		%Sprite2D.modulate = Color(1.0, 1.0, 1.0, 1.0)
-		visible_to_enemy = 1
+		visible_to_enemy += 0.5
 		hiding = false
+		step_volume = 2
+		move_speed = 220
+
+func step():
+	if visible_to_enemy <= 2:
+		visible_to_enemy += 0.001 * step_volume
+		step_time += 0.001 * step_volume
+
+func still():
+	visible_to_enemy -= step_time
+	step_time = 0
 "
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gfavo"]
