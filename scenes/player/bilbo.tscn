@@ -10,6 +10,9 @@ var draw_time = 3
 var armed := false
 var can_interact := true
 var is_stabbing = false
+var hiding = false
+var have_ring = false
+var visible_to_enemy = 1
 
 func _physics_process(_delta: float) -> void:
 	
@@ -21,7 +24,7 @@ func _physics_process(_delta: float) -> void:
 	move_and_slide()
 
 func _process(_delta: float) -> void:
-	 can_interact =! armed
+	can_interact =! armed
 	if Input.is_action_just_pressed(\"Interact\"):
 		if armed == true:
 			pass
@@ -29,7 +32,7 @@ func _process(_delta: float) -> void:
 	if is_stabbing == false:
 		%Sword.rotation = ( get_global_mouse_position() - global_position).angle() + deg_to_rad(0)
 
-func _input(event) -> void:
+func _input(_event) -> void:
 	var direction_x := Input.get_axis(\"Move_Left\",  \"Move_Right\")
 	velocity.x = direction_x * move_speed
 	var direction_y := Input.get_axis(\"Move_Up\",\"Move_Down\")
@@ -57,11 +60,42 @@ func _input(event) -> void:
 				is_stabbing = true
 				
 				%TimeToStab.start()
+	if Input.is_action_just_pressed(\"Hide\"):
+		print(\"attempting to hide\")
+		if hiding == false:
+			hideing()
+	if Input.is_action_just_released(\"Hide\"):
+		print(\"attempting to reveal\")
+		if hiding == true:
+			reveal()
 
 func _on_time_to_stab_timeout() -> void:
 	%CollisionShape2D.position.x -= 5
 	%ColorRect.position.x -= 5
 	is_stabbing = false
+
+func hideing():
+	print(\"hiding\")
+	if have_ring == true:
+		%Sprite2D.visible = false
+		visible_to_enemy = 0
+		hiding = true
+	else:
+		print(\"hidden\")
+		%Sprite2D.modulate = Color(1.0, 1.0, 1.0, 0.5)
+		visible_to_enemy = 0.5
+		hiding = true
+
+func reveal():
+	if have_ring == true:
+		%Sprite2D.visible = true
+		visible_to_enemy = 1
+		hiding = false
+	else:
+		print(\"unhide\")
+		%Sprite2D.modulate = Color(1.0, 1.0, 1.0, 1.0)
+		visible_to_enemy = 1
+		hiding = false
 "
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_gfavo"]
@@ -69,14 +103,14 @@ func _on_time_to_stab_timeout() -> void:
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5208v"]
 size = Vector2(20, 2)
 
-[node name="Bilbo" type="CharacterBody2D" unique_id=1188193354]
+[node name="Bilbo" type="CharacterBody2D" unique_id=1188193354 groups=["Player"]]
 script = SubResource("GDScript_5208v")
-move_speed = null
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1693926725]
+unique_name_in_owner = true
 texture = ExtResource("1_gfavo")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=524170039]
+[node name="BilbosGlutiousMaximus" type="CollisionShape2D" parent="." unique_id=524170039]
 shape = SubResource("CapsuleShape2D_gfavo")
 
 [node name="Sword" type="Area2D" parent="." unique_id=301396952]
@@ -102,6 +136,7 @@ wait_time = 0.2
 one_shot = true
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=1003255397]
+zoom = Vector2(2, 2)
 position_smoothing_enabled = true
 position_smoothing_speed = 2.0
 drag_horizontal_enabled = true
